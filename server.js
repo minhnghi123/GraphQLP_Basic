@@ -52,6 +52,17 @@ const resolvers = {
       db.games.push(newGame);
       return newGame;
     },
+    updateGame(_, args) {
+      const gameIndex = db.games.findIndex((game) => game.id === args.id);
+      if (gameIndex === -1) {
+        throw new Error("Game not found");
+      }
+      db.games[gameIndex] = {
+        ...db.games[gameIndex],
+        ...args.game,
+      };
+      return db.games[gameIndex];
+    },
   },
 };
 const server = new ApolloServer({
