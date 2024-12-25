@@ -1,7 +1,15 @@
 import db from "../_db.js";
+import { setCache, getCache, delCache } from "../services/cache.service.js";
 export const gameResolver = {
   Query: {
-    games() {
+    async games() {
+      const cacheKey = "games";
+      const cachedData = await getCache(cacheKey);
+      if (cachedData) {
+        console.log("done loading cached data");
+        return cachedData;
+      }
+      await setCache(cacheKey, db.games);
       return db.games;
     },
     game(_, args) {
